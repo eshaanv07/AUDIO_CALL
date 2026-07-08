@@ -3,6 +3,9 @@ import queue
 import numpy as np
 
 SAMPLE_RATE=44100
+CHUNK_DURATION=0.01
+BLOCK_SIZE=int(SAMPLE_RATE*CHUNK_DURATION)
+
 playback_queue=queue.Queue()
 
 def output_callback(outdata,frames,time_info,status):
@@ -13,7 +16,7 @@ def output_callback(outdata,frames,time_info,status):
     outdata[:]=chunk
 
 def start_playback_stream():
-    stream=sd.OutputStream(samplerate=SAMPLE_RATE,channels=1,callback=output_callback)
+    stream=sd.OutputStream(samplerate=SAMPLE_RATE,channels=1,blocksize=BLOCK_SIZE,callback=output_callback)
     stream.start()
     return stream
 
